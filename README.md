@@ -4,7 +4,7 @@
 
 ### Description:
 
-Saving and deleting notes is fully functional. To save a note, right click a message and click "Note Message" or add through command with the message link. T
+Saving and deleting notes is fully functional. To save a note, right click a message and click "Note Message" or add through command with the message link. 
 
 Notebook Commands:
 
