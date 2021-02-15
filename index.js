@@ -185,8 +185,8 @@ module.exports = class Notebook extends Plugin {
     }) 
   }
   pluginWillUnload () {
-    uninject('note-button-dev')
-    uninject('note-context-menu-dev')
+    uninject('note-button')
+    uninject('note-context-menu')
     powercord.api.commands.unregisterCommand('Notebook')
   }
 
