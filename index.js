@@ -144,8 +144,9 @@ module.exports = class Notebook extends Plugin {
                     result = {
                         type: "rich",
                         author: {
-                            iconURL: note['Avatar_URL'].replace("png","webm"),
+                            iconURL: note['Avatar_URL'],
                             name: note['Username'],
+                            proxy_icon_url: note['Avatar_URL']
                         },
                         footer: {
                             text: note['Timestamp'].replace("T"," ").replace("Z","")
