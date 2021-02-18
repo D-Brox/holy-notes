@@ -11,7 +11,7 @@ Notebook Commands:
 - .notebook read [N]: Shows Note given it's number. You can use 'last' instead of a number to get the last note
 - .notebook open [N]: Opens the Nth Page of Notebook, with 10 notes/page. You can use 'last' instead of a number to get the last page
 - .notebook write [link]: Writes Note given it's message link',
-- .notebook erase [N] please: Erases Note from your Notebook given it's number. As a safe measure, added 'please' use 'please' after the number to erase it.
+- .notebook erase [N] please: Erases Note from your Notebook given it's number. As a safe measure, use 'please' after the number to erase it.
 
  
 ### Some quick notes:
