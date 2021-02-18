@@ -192,7 +192,7 @@ module.exports = class Notebook extends Plugin {
   pluginWillUnload () {
     uninject('note-button')
     uninject('note-context-menu')
-    powercord.api.commands.unregisterCommand('Notebook')
+    powercord.api.commands.unregisterCommand('notebook')
   }
 
   async _injectHeaderBarContainer () {
