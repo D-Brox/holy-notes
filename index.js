@@ -8,22 +8,26 @@ const { getMessage } = getModule(['getMessages'], false)
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
-Inject into the 3 dot message menu
 Inject message component into embed
+Put saveMessage() in NotesHandler
+Fix modal somehow
+Clean notebook command
 */
 
 const NotebookButton = require('./components/NotebookButton')
+const NoteButton = require('./components/NoteButton')
 const Modal = require('./components/Modal')
 
 module.exports = class Notebook extends Plugin {
   async startPlugin () {
     this._injectHeaderBarContainer()
     this._injectContextMenu()
+    this._injectToolbar()
 
     powercord.api.commands.registerCommand({
         command: 'notebook',
-        description: 'Add, Get, Delete and List notes',
-        usage: '{c} [ args ]',
+        description: 'Notebook to keep your favourite notes',
+        usage: '{c} [ args ]', //and now comes the horrifying mess. Heelp
         executor: (args) => {
             let IDArray
             if(args[1]) IDArray = args[1].split("/")
@@ -161,6 +165,7 @@ module.exports = class Notebook extends Plugin {
                     }
                     break
             }
+           // i really should make functions to clean this horrifying mess up
         },
         autocomplete: (args) => {
 			if (args.length !== 1) {
@@ -170,7 +175,7 @@ module.exports = class Notebook extends Plugin {
                 read: 'Shows Note as embed given it\'s number',
                 open: 'Opens the Nth Page of Notebook, with 10 notes/page.',
                 write: 'Writes Note given it\'s message link',
-                erase: 'Erases Note from your Notebook given it\'s number. As a safe measuere, type \'confirm\' after it.'
+                erase: 'Erases Note from your Notebook given it\'s number. As a safe measuere, type \'please\' after the number.'
             }
 			return {
 				commands: Object.keys(options)
@@ -229,6 +234,26 @@ module.exports = class Notebook extends Plugin {
     MessageContextMenu.default.displayName = 'MessageContextMenu'
   }
 
+  async _injectToolbar() {
+	const MiniPopover = await getModule((m) => m?.default?.displayName === "MiniPopover");
+    inject("note-toolbar", MiniPopover, "default", (args, res) => {
+		const props = findInReactTree(res, (r) => r?.message);
+		const channel = findInReactTree(args, (r) => r?.channel);
+		if (!props) return res;
+        //console.log(channel.channel.guild_id)
+		res.props.children.unshift(
+			React.createElement(NoteButton, {
+                message: props.message,
+                channel: channel.channel
+			})
+		);
+		return res;
+	});
+	MiniPopover.default.displayName = "MiniPopover";
+  }
+
+  
+
   saveMessage(args) {
     let attachments = args[0].message.attachments[0]
     let noteFormat = {
@@ -248,7 +273,8 @@ module.exports = class Notebook extends Plugin {
     }
     NotesHandler.setNote(noteFormat)
   }
-  //The obvious modifying saveMessage() broke in a weird way, and i don't have time to make this in a prettier way, so...
+  
+  //Will merge this with saveMessage later. I'm not in the mood right now and this should be in NotesHandler anyway. 
   saveMessageFromLink(args) {
     let linkArray = args.split("/")         
     let message= getMessage(linkArray[linkArray.length-2],linkArray[linkArray.length-1])
