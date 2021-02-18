@@ -1,3 +1,8 @@
+# 1.1.2 / 2021-01-18
+
+ * added buttom on message toolbar
+
+
 # 1.1.1 / 2021-01-14
 
  * renamed and unified commands
