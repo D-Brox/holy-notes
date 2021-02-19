@@ -1,5 +1,7 @@
 # holy-notes
- A Powercord plugin that lets you keep messages in a Notebook, as personal pins. (Work in Progress, will look better, I hope)
+ A Powercord plugin that lets you keep messages in a Notebook.
+
+(WIP, will look better, I hope)
 
 
 ### Description:
@@ -8,10 +10,10 @@ Saving and deleting notes is fully functional. To save a note, right click a mes
 
 Notebook Commands:
 
-- .notebook read [N]: Shows Note given it's number. You can use 'last' instead of a number to get the last note
-- .notebook open [N]: Opens the Nth Page of Notebook, with 10 notes/page. You can use 'last' instead of a number to get the last page
-- .notebook write [link]: Writes Note given it's message link',
-- .notebook erase [N] please: Erases Note from your Notebook given it's number. As a safe measure, use 'please' after the number to erase it.
+- [prefix]notebook read [N]: Shows Note given it's number. You can use 'last' instead of a number to get the last note
+- [prefix]notebook open [N]: Opens the Nth Page of Notebook, with 10 notes/page. You can use 'last' instead of a number to get the last page
+- [prefix]notebook write [link]: Writes Note given it's message link',
+- [prefix]notebook erase [N]: Erases Note from your Notebook given it's number.
 
  
 ### Some quick notes:
