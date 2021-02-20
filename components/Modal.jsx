@@ -25,10 +25,10 @@ class noteDisplay extends React.PureComponent {
 
     render() {
         const noteArray = [];
-        const settings = NotesHandler.getNotes();
+        const notes = NotesHandler.getNotes();
 
-        for(let i = 0; i < Object.keys(settings).length; i++) {
-            let note = settings[Object.keys(settings)[i]]
+        for(let i = 0; i < Object.keys(notes).length; i++) {
+            let note = notes[Object.keys(notes)[i]]
 
 			const user = UserStore.getUser(note['User_ID']);
 			let ExampleMessage = <ChannelMessage
