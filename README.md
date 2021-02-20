@@ -1,4 +1,4 @@
-# holy-notes
+# Holy Notes
  A Powercord plugin that lets you keep messages in a Notebook, as personal pins. (Work in Progress)
 
 
@@ -16,5 +16,6 @@ Notebook Commands:
  
 ### Some quick notes:
 
-Command .notebook read will be remade
+Command .notebook read will be remade.
+
 Will add buttons to Modal (jump to message and delete note).
