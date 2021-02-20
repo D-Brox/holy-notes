@@ -7,8 +7,8 @@ const { findInReactTree } = require('powercord/util')
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
-Inject message component into embed
-Clean notebook command
+Clean notebook command. It's cleaner, but can be better
+Add buttons to Modal
 */
 
 const NotebookButton = require('./components/NotebookButton')
@@ -24,7 +24,7 @@ module.exports = class Notebook extends Plugin {
     powercord.api.commands.registerCommand({
         command: 'notebook',
         description: 'Notebook to keep your favourite notes',
-        usage: '{c} [ args ]', //and now comes the horrifying mess. Heelp
+        usage: '{c} [ args ]',
         executor: (args) => {
             let IDArray
             if(args[1]) IDArray = args[1].split("/")
@@ -105,29 +105,14 @@ module.exports = class Notebook extends Plugin {
                     }
                     notes = NotesHandler.getNotes()
                     note = notes[Object.keys(notes)[n-1]]
+                    //console.log(note)
                     if(note===undefined)return {
                         send: false,
                         result: 'Not a note.'
                     }
-                    result = {
-                        type: "rich",
-                        author: {
-                            iconURL: note['Avatar_URL'],
-                            name: note['Username'],
-                            proxy_icon_url: note['Avatar_URL']
-                        },
-                        footer: {
-                            text: note['Timestamp'].replace("T"," ").replace("Z","")
-                        },
-                        description: note['Content']
-                    }
-                    return {
-                        send: false,
-                        result
-                    }
+                    openModal(() => React.createElement(Modal,{note, all:false}))
                     break
             }
-           // i really should make functions to clean this horrifying mess up
         },
         autocomplete: (args) => {
 			if (args.length !== 1) {
@@ -169,7 +154,7 @@ module.exports = class Notebook extends Plugin {
         }, React.createElement(NotebookButton, {
           className: [ 'note-button', classes.icon ].join(' '),
           onClick: () =>
-            openModal(() => React.createElement(Modal))
+            openModal(() => React.createElement(Modal,{all:true}))
         })))
         if (!res.props.toolbar) {
           res.props.toolbar = Switcher
