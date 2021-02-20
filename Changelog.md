@@ -1,3 +1,7 @@
+# 1.1.4 / 2021-02- 20
+
+ * modal for .notebook read command
+
 # 1.1.3 / 2021-02- 20
 
  * fixed modal
