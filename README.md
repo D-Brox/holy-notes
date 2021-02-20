@@ -14,8 +14,6 @@ Notebook Commands:
 - .notebook erase [N] please: Erases Note from your Notebook given it's number.
 
  
-### Some quick notes:
+### TODO:
 
-Command .notebook read will be remade.
-
-Will add buttons to Modal (jump to message and delete note).
+Add buttons to Modal (jump to message and delete note).
