@@ -25,34 +25,53 @@ class noteDisplay extends React.PureComponent {
 
     render() {
         const noteArray = [];
-        const notes = NotesHandler.getNotes();
+        let NoteMessage
+        if(this.props.all){
+            const notes = NotesHandler.getNotes();
 
-        for(let i = 0; i < Object.keys(notes).length; i++) {
-            let note = notes[Object.keys(notes)[i]]
+            for(let i = 0; i < Object.keys(notes).length; i++) {
+                let note = notes[Object.keys(notes)[i]]
 
-			const user = UserStore.getUser(note['User_ID']);
-			let ExampleMessage = <ChannelMessage
-			message={new Message({ author: user, content: note['Content'], attachments: note['Attachment'] || [], embeds: note['Embeds'] || [], id: note['Message_ID']})}
-			channel={channel}/>
-			noteArray.push(ExampleMessage)
-			noteArray.push(<br/>)
+			    const user = UserStore.getUser(note['User_ID']);
+			    NoteMessage = <ChannelMessage
+			    message={new Message({ author: user, content: note['Content'], attachments: note['Attachment'] || [], embeds: note['Embeds'] || [], id: note['Message_ID']})}
+			    channel={channel}/>
+			    noteArray.push(NoteMessage)
+			    noteArray.push(<br/>)
+            }
+            return(	
+            <Modal className='Notebook' size={Modal.Sizes.LARGE}>
+                <Modal.Header>
+                <FormTitle tag='h3'>Notebook</FormTitle>
+                <Modal.CloseButton onClick={closeModal}/>
+                </Modal.Header>
+
+                <Modal.Content>
+						    {noteArray}
+
+                </Modal.Content>
+            </Modal>
+            )
+        } else {
+            const note = this.props.note
+		    const user = UserStore.getUser(note['User_ID']);
+		    NoteMessage = <ChannelMessage
+		    message={new Message({ author: user, content: note['Content'], attachments: note['Attachment'] || [], embeds: note['Embeds'] || [], id: note['Message_ID']})}
+		    channel={channel}/>
+		    noteArray.push(NoteMessage)
+            return(	
+                <Modal className='Notebook' size={Modal.Sizes.MEDIUM}>
+                    <Modal.Header>
+                    <FormTitle tag='h3'>{'Message '+note['Message_ID']}</FormTitle>
+                    <Modal.CloseButton onClick={closeModal}/>
+                    </Modal.Header>
+                    <Modal.Content>
+        						{noteArray}    
+                    </Modal.Content>
+                </Modal>
+            )
         }
-
-    return(	
-        <Modal className='Notebook' size={Modal.Sizes.LARGE}>
-            <Modal.Header>
-            <FormTitle tag='h3'>Notebook</FormTitle>
-            <Modal.CloseButton onClick={closeModal}/>
-            </Modal.Header>
-
-            <Modal.Content>
-						{noteArray}
-
-            </Modal.Content>
-        </Modal>
-        )
     }
 }
 
 module.exports = noteDisplay;
-
