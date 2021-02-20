@@ -1,16 +1,13 @@
 const { Plugin } = require('powercord/entities')
-const { Tooltip} = require('powercord/components')
+const { Tooltip } = require('powercord/components')
 const { inject, uninject } = require('powercord/injector')
 const { React, getModule, getModuleByDisplayName} = require('powercord/webpack')
 const { open: openModal } = require('powercord/modal')
 const { findInReactTree } = require('powercord/util')
-const { getMessage } = getModule(['getMessages'], false)
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
 Inject message component into embed
-Put saveMessage() in NotesHandler
-Fix modal somehow
 Clean notebook command
 */
 
@@ -41,7 +38,7 @@ module.exports = class Notebook extends Plugin {
                         send: false,
                         result: 'Please input a valid link'
                     }
-                    this.saveMessageFromLink(args[1])
+                    NotesHandler.saveNote(args[1],true)
                     return {
                         send: false,
                         result: 'Note **'+IDArray[IDArray.length-1].toString()+'** added'
@@ -55,39 +52,10 @@ module.exports = class Notebook extends Plugin {
                         result: 'Please input a number or vald ID'
                     }
                     note = notes[Object.keys(notes)[n-1]]
-                    //console.log(note)
                     messageID = note['Message_ID'] 
                     if(messageID===undefined)return {
                         send: false,
-                        result: '```\nNot a note.\n```'
-                    }
-                    if(args[2]!=='please'){
-                        result = {
-                            type: "rich",
-                            author: {
-                                iconURL: note['Avatar_URL'].replace("png","webm"),
-                                name: note['Username'],
-                            },
-                            footer: {
-                                text: note['Timestamp'].replace("T"," ").replace("Z","")
-                            },
-                            description: note['Content']
-                        }
-                        if(note['Attachment']) {
-                            result['image'] = {
-                                url: note['Attachment'],
-                                height: note['Height'],
-                                width: note['Width']
-                            }
-                        }
-                        result['footer'] = {
-                                text: 'If you really want to erase permanently the note '+n.toString()+', as seen above, add "please" at the end of the command. '
-                            },
-                        //console.log(result)
-                        return {
-                            send: false,
-                            result
-                        }
+                        result: '**Not a note.**'
                     }
                     NotesHandler.deleteNote(messageID)
                     return {
@@ -116,7 +84,7 @@ module.exports = class Notebook extends Plugin {
                         let noteUser = notes[note]["Username"]         
                         out+= '**Note '+noteID.toString()+"** by *"+ noteUser+"*:\n```"
                         let contentwords = notes[note]["Content"].split(" ")
-                        for(let i = 0; i<contentwords.length && i<10; i++) out+=" "+contentwords[i]
+                        for(let j = 0; j<contentwords.length && j<10; j++) out+=" "+contentwords[j]
                         if(contentwords.length>10) out+= "..."
                         out+='\n```'
                     }
@@ -133,13 +101,13 @@ module.exports = class Notebook extends Plugin {
                 case 'read':
                     if(n.isNaN)return {
                         send: false,
-                        result: '`Not a note.`'
+                        result: '**Not a note.**'
                     }
                     notes = NotesHandler.getNotes()
                     note = notes[Object.keys(notes)[n-1]]
                     if(note===undefined)return {
                         send: false,
-                        result: '```\nNot a note.\n```'
+                        result: 'Not a note.'
                     }
                     result = {
                         type: "rich",
@@ -152,13 +120,6 @@ module.exports = class Notebook extends Plugin {
                             text: note['Timestamp'].replace("T"," ").replace("Z","")
                         },
                         description: note['Content']
-                    }
-                    if(note['Attachment']) {
-                        result['image'] = {
-                            url: note['Attachment'],
-                            height: note['Height'],
-                            width: note['Width']
-                        }
                     }
                     return {
                         send: false,
@@ -176,7 +137,7 @@ module.exports = class Notebook extends Plugin {
                 read: 'Shows Note as embed given it\'s number',
                 open: 'Opens the Nth Page of Notebook, with 10 notes/page.',
                 write: 'Writes Note given it\'s message link',
-                erase: 'Erases Note from your Notebook given it\'s number. As a safe measuere, type \'please\' after the number.'
+                erase: 'Erases Note from your Notebook given it\'s number.'
             }
 			return {
 				commands: Object.keys(options)
@@ -218,14 +179,13 @@ module.exports = class Notebook extends Plugin {
       return res
     })
   }
-
   async _injectContextMenu() {
     const Menu = await getModule(['MenuGroup', 'MenuItem'])
     const MessageContextMenu = await getModule(m => m.default && m.default.displayName == 'MessageContextMenu')
     inject('note-context-menu', MessageContextMenu, 'default', (args, res) => {
       if (!findInReactTree(res, c => c.props && c.props.id == 'notebook')) res.props.children.splice(4, 0,
         React.createElement(Menu.MenuGroup, null, React.createElement(Menu.MenuItem, {
-          action: () => this.saveMessage(args),
+          action: () => NotesHandler.saveNote(args[0],false),
           id: 'notebook',
           label: 'Note Message'
         })
@@ -251,51 +211,5 @@ module.exports = class Notebook extends Plugin {
 		return res;
 	});
 	MiniPopover.default.displayName = "MiniPopover";
-  }
-
-  
-
-  saveMessage(args) {
-    let attachments = args[0].message.attachments[0]
-    let noteFormat = {
-      'Message_ID' : args[0].message.id,
-      'Username' : args[0].message.author.username,
-      'User_ID' : args[0].message.author.id,
-      'Content' : args[0].message.content,
-      'Timestamp' : args[0].message.timestamp,
-      'Editstamp' : args[0].message.editedTimestamp,
-      'Message_URL' : `https://discord.com/channels/${args[0].channel.guild_id}/${args[0].channel.id}/${args[0].message.id}`,
-      'Avatar_URL' : `https://cdn.discordapp.com/avatars/${args[0].message.author.id}/${args[0].message.author.avatar}.png`
-    }
-    if (attachments) {
-        noteFormat['Attachment'] = attachments.url
-        noteFormat['Height'] = attachments.height
-        noteFormat['Width'] = attachments.width
-    }
-    NotesHandler.setNote(noteFormat)
-  }
-  
-  //Will merge this with saveMessage later. I'm not in the mood right now and this should be in NotesHandler anyway. 
-  saveMessageFromLink(args) {
-    let linkArray = args.split("/")         
-    let message= getMessage(linkArray[linkArray.length-2],linkArray[linkArray.length-1])
-    //console.log(message)   
-    let attached = message.attachments[0]
-    let noteFormat = {
-      'Message_ID' : message.id,
-      'Username' : message.author.username,
-      'User_ID' : message.author.id,
-      'Content' : message.content,
-      'Timestamp' : message.timestamp,
-      'Editstamp' : message.editedTimestamp,
-      'Message_URL' : args,
-      'Avatar_URL' : `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
-    }
-    if (attached) {
-        noteFormat['Attachment'] = attached.url
-        noteFormat['Height'] = attached.height
-        noteFormat['Width'] = attached.width
-    }
-    NotesHandler.setNote(noteFormat)
   }
 }

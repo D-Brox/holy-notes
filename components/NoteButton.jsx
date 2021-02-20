@@ -26,25 +26,7 @@ class NoteButton extends React.PureComponent {
 					<Button
                         className={`note-button`}
 						onClick={(e) => {
-							try {this.props.message.attachments[0]
-                            noteFormat = {
-                              'Message_ID' : this.props.message.id,
-                              'Username' : this.props.message.author.username,
-                              'User_ID' : this.props.message.author.id,
-                              'Content' : this.props.message.content,
-                              'Timestamp' : this.props.message.timestamp,
-                              'Editstamp' : this.props.message.editedTimestamp,
-                              'Message_URL' : `https://discord.com/channels/${this.props.channel.guild_id}/${this.props.channel.id}/${this.props.message.id}`,
-                              'Avatar_URL' : `https://cdn.discordapp.com/avatars/${this.props.message.author.id}/${this.props.message.author.avatar}.png`
-                            }
-                             if (attachments) {
-                                noteFormat['Attachment'] = attachments.url
-                                noteFormat['Height'] = attachments.height
-                                noteFormat['Width'] = attachments.width
-                            }
-                            NotesHandler.setNote(noteFormat)} catch(err){
-                            console.log(err)
-                            }
+                            NotesHandler.saveNote(this.props,false)
 						}}
                         onMouseEnter={onMouseEnter}
 						onMouseLeave={onMouseLeave}
