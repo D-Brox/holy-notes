@@ -1,8 +1,13 @@
-# 1.1.4 / 2021-02- 20
+# 1.1.5 / 2021-02-2*
+
+ * added delete button in modal
+ * modal now also displays isolated messages
+
+# 1.1.4 / 2021-02-20
 
  * added modal for .notebook read command
 
-# 1.1.3 / 2021-02- 20
+# 1.1.3 / 2021-02-20
 
  * fixed modal
  * remade saveMessage()
