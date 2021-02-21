@@ -8,12 +8,13 @@ Saving and deleting notes is fully functional. To save a note, right click a mes
 
 Notebook Commands:
 
-- .notebook read [N]: Shows Note given it's number. You can use 'last' instead of a number to get the last note
-- .notebook open [N]: Opens the Nth Page of Notebook, with 10 notes/page. You can use 'last' instead of a number to get the last page
+- .notebook read [N]: Shows Note given it's number or messageID. You can use 'last' display the last note
+- .notebook open [N]: Opens Notebook
 - .notebook write [link]: Writes Note given it's message link,
-- .notebook erase [N] please: Erases Note from your Notebook given it's number.
+- .notebook erase [N]: Erases Note from your Notebook given it's number.
 
  
 ### TODO:
 
-Add buttons to Modal (jump to message and delete note).
+Add jump to message in modal
+Fix Delete button position
