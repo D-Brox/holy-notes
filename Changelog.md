@@ -1,7 +1,9 @@
-# 1.1.5 / 2021-02-2*
+# 1.2.0 / 2021-02-21
 
- * added delete button in modal
+ * added buttons in modal
+ * delete button and view button functional
  * modal now also displays isolated messages
+ * reworked notebook command
 
 # 1.1.4 / 2021-02-20
 
