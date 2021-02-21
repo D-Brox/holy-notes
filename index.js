@@ -7,7 +7,7 @@ const { findInReactTree } = require('powercord/util')
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
-Add buttons to Modal
+Fix Buttons in Modal
 */
 
 const NotebookButton = require('./components/NotebookButton')
