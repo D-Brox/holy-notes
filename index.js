@@ -64,39 +64,7 @@ module.exports = class Notebook extends Plugin {
                     }
                     break
                 case 'open':
-                    if(!n) n = 1
-                    notes = NotesHandler.getNotes()
-                    if(!Object.keys(notes).length) return {
-                        send: false,
-                        result: '```\nThere are no notes in your Notebook.\n```'
-                    }
-                    let end
-                    if(Math.floor(Object.keys(notes).length/10) < n || args[1]==='last'){
-                        n = Math.floor(Object.keys(notes).length/10)+1
-                        end = Object.keys(notes).length
-                    }
-                    else end = 10*n
-                    let out = ''
-	                for(let i =10*(n-1); i<end; i++) {	        
-                        let note = Object.keys(notes)[i]
-                        //console.log(note)
-                        let noteID = i+1
-                        let noteUser = notes[note]["Username"]         
-                        out+= '**Note '+noteID.toString()+"** by *"+ noteUser+"*:\n```"
-                        let contentwords = notes[note]["Content"].split(" ")
-                        for(let j = 0; j<contentwords.length && j<10; j++) out+=" "+contentwords[j]
-                        if(contentwords.length>10) out+= "..."
-                        out+='\n```'
-                    }
-                    result = {
-                        type: 'rich',
-                        title: 'Notebook (page '+ n.toString() +')\nNotes '+ (10*(n-1)+1).toString() +" to "+ end.toString() +':',
-                        description: out
-                    };     
-                    return {
-                        send: false,
-                        result
-                    }
+                    openModal(() => React.createElement(Modal,{all:true}))
                     break
                 case 'read':
                     if(n.isNaN)return {
