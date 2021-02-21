@@ -10,9 +10,9 @@ const UserStore = getModule([ 'getCurrentUser' ], false);
 const ChannelMessage = getModule(m => m.type && m.type.displayName == 'ChannelMessage', false)
 
 const channel = {
-	isPrivate: () => false,
-	isSystemDM: () => false,
-	getGuildId: () => 'NoteModal'
+    isPrivate: () => false,
+    isSystemDM: () => false,
+    getGuildId: () => 'NoteModal'
 };
 
 class noteDisplay extends React.PureComponent {
@@ -29,15 +29,16 @@ class noteDisplay extends React.PureComponent {
         let title
         let size
         let buttons = <></>
+        let UIelements
         if(this.props.all){
             const notes = NotesHandler.getNotes();
             for(let i = 0; i < Object.keys(notes).length; i++) {
                 let note = notes[Object.keys(notes)[i]]
                 let divider
-			    const user = UserStore.getUser(note['User_ID']);
-			    NoteMessage = <div className='NoteMessages'>
+                const user = UserStore.getUser(note['User_ID']);
+                NoteMessage = <div className='NoteMessages'>
                     <ChannelMessage
-			            message={
+                        message={
                             new Message({
                                 author: user,
                                 content: note['Content'],
@@ -45,25 +46,21 @@ class noteDisplay extends React.PureComponent {
                                 embeds: note['Embeds'] || [],
                                 id: note['Message_ID']
                         })}
-			            channel={channel}                        
-                        //onDoubleClick={openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))} // This didn't work.also tried ondblClick
-                    />
-                    <div className='deleteNote'
-
-                        ><Tooltip
-                            position='left'
-                            text='Cancel Quoting Message'
-                            
-                        ><Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
+                        channel={channel}
+                    /><Tooltip position='top'>
+                        <Icon name='Reply' color='var(--interactive-normal)' onClick={closeModal}/>
+                        <Icon name='Search' color='var(--interactive-normal)' onClick={() => {
+                            openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))
+                        }}/>
+                        <Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
                             openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
                             this.forceUpdate()
                         }}/>
-                        </Tooltip>
-                    </div>
+                    </Tooltip>
                 </div>
-			    noteArray.push(NoteMessage)
+                noteArray.push(NoteMessage)
                 
-			    divider = (i===(Object.keys(notes).length-1))?<></>:<Divider/>
+                divider = (i===(Object.keys(notes).length-1))?<></>:<Divider/>
                 noteArray.push(divider)
                 noteArray.push(<br/>)
             }
@@ -71,33 +68,9 @@ class noteDisplay extends React.PureComponent {
             size = Modal.Sizes.LARGE
         } else {
             const note = this.props.note
-		    const user = UserStore.getUser(note['User_ID']);
-		    NoteMessage = <div className='NoteMessages'>
-                    <ChannelMessage
-			            message={
-                            new Message({
-                                author: user,
-                                content: note['Content'],
-                                attachments: note['Attachment'] || [],
-                                embeds: note['Embeds'] || [],
-                                id: note['Message_ID']
-                        })}
-			            channel={channel}
-                    />
-                    <div className='deleteNote'
-
-                        ><Tooltip
-                            position='left'
-                            text='Cancel Quoting Message'
-                            
-                        ><Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
-                            openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
-                            this.forceUpdate()
-                        }}/>
-                        </Tooltip>
-                    </div>
-                </div>
-		    noteArray.push(NoteMessage)
+            const user = UserStore.getUser(note['User_ID']);
+            UIelements = <></>
+            
             title = 'Message '+note['Message_ID']
             size = Modal.Sizes.MEDIUM
             if(this.props.del){
@@ -129,10 +102,32 @@ class noteDisplay extends React.PureComponent {
                     onClick={closeModal}
                 >Jump To Message
                 </Button>
+                UIelements = <Tooltip position='top'>
+                    <Icon name='Reply' color='var(--interactive-normal)' onClick={closeModal}/>
+                    <Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
+                        openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
+                        this.forceUpdate()
+                    }}/>
+                </Tooltip>
             }
-            console.log(buttons)
+
+            NoteMessage = <div className='NoteMessages'>
+                <ChannelMessage
+                    message={
+                        new Message({
+                            author: user,
+                            content: note['Content'],
+                            attachments: note['Attachment'] || [],
+                            embeds: note['Embeds'] || [],
+                            id: note['Message_ID']
+                    })}
+                    channel={channel}
+                />
+                {UIelements}
+            </div>
+            noteArray.push(NoteMessage)
         }
-        try{return(	
+        try{return(    
         <Modal className='Notebook' size={size}>
             <Modal.Header>
                 <FormTitle tag='h3'>{title}</FormTitle>
@@ -140,7 +135,7 @@ class noteDisplay extends React.PureComponent {
             </Modal.Header>
 
             <Modal.Content>
-				    {noteArray}
+                    {noteArray}
             </Modal.Content>
             <Modal.Footer>
                 {buttons}
