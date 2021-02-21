@@ -1,4 +1,4 @@
-/* Credits to Kyza for making this custom SettingsHandler */
+/* Credits to Kyza for making the base of this Handler */
 const fs = require('fs')
 const path = require('path')
 const notesPath = path.join(__dirname, 'notes.json')
@@ -69,7 +69,7 @@ class NotesHandler {
         let message
         let messageLink
         let linkArray
-        console.log(args)
+        //console.log(args)
         try{
             if(link===true){
                 linkArray = args.split("/")         
@@ -84,6 +84,9 @@ class NotesHandler {
             let attached = message.attachments
             let embeded = message.embeds
             embeded =  embeded.filter(embed => !embed['__mlembed']);
+            for(let i = 0; i < embeded.length; i++){
+                if(embeded[i].timestamp)embeded[i].timestamp=null
+            }
             let noteFormat = {
                 'Message_ID' : message.id,
                 'Username' : message.author.username,
