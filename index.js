@@ -7,7 +7,6 @@ const { findInReactTree } = require('powercord/util')
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
-Clean notebook command. It's cleaner, but can be better
 Add buttons to Modal
 */
 
@@ -26,114 +25,55 @@ module.exports = class Notebook extends Plugin {
             description: 'Notebook to keep your favourite notes',
             usage: '{c} [ args ]',
             executor: (args) => {
-                let IDArray
-                if(args[1]) IDArray = args[1].split("/")
-                let n = Number(args[1])
-                let result
-                let notes
-                let note
+                //This is truly elegant
+                let out = args[1]?this.argHandler(args[1]):{valid:false}
+                if(out['valid']===false && args[0]!=='open'){
+                    return {
+                        send: false,
+                        result: 'Please input a valid Link, Index or Message ID'
+                    }
+                }
                 switch(args[0]){               
                     case 'write':
-                        if(!args[1]) return {
-                            send: false,
-                            result: 'Please input a valid link'
-                        }
-                        NotesHandler.saveNote(args[1],true)
+                        NotesHandler.saveNote(out['link'],true)
                         return {
                             send: false,
-                            result: 'Note **'+IDArray[IDArray.length-1].toString()+'** added'
+                            result: 'Note **'+out['messageID']+'** added'
                         }
                         break
                     case 'erase':
-                        let messageID
-                        notes = NotesHandler.getNotes()
-                        if(n.isNaN)return {
-                            send: false,
-                            result: 'Please input a number or vald ID'
-                        }
-                        note = notes[Object.keys(notes)[n-1]]
-                        messageID = note['Message_ID'] 
-                        if(messageID===undefined)return {
-                            send: false,
-                            result: '**Not a note.**'
-                        }
-                        NotesHandler.deleteNote(messageID)
+                        NotesHandler.deleteNote(out['messageID'])
                         return {
                             send: false,
-                            result: 'Note **'+n.toString()+'** deleted'
+                            result: 'Note **'+out['messageID']+'** deleted'
                         }
                         break
                     case 'open':
-                        if(!n) n = 1
-                        notes = NotesHandler.getNotes()
-                        if(!Object.keys(notes).length) return {
-                            send: false,
-                            result: '```\nThere are no notes in your Notebook.\n```'
-                        }
-                        let end
-                        if(Math.floor(Object.keys(notes).length/10) < n || args[1]==='last'){
-                            n = Math.floor(Object.keys(notes).length/10)+1
-                            end = Object.keys(notes).length
-                        }
-                        else end = 10*n
-                        let out = ''
-	                    for(let i =10*(n-1); i<end; i++) {	        
-                            let note = Object.keys(notes)[i]
-                            //console.log(note)
-                            let noteID = i+1
-                            let noteUser = notes[note]["Username"]         
-                            out+= '**Note '+noteID.toString()+"** by *"+ noteUser+"*:\n```"
-                            let contentwords = notes[note]["Content"].split(" ")
-                            for(let j = 0; j<contentwords.length && j<10; j++) out+=" "+contentwords[j]
-                            if(contentwords.length>10) out+= "..."
-                            out+='\n```'
-                        }
-                        result = {
-                            type: 'rich',
-                            title: 'Notebook (page '+ n.toString() +')\nNotes '+ (10*(n-1)+1).toString() +" to "+ end.toString() +':',
-                            description: out
-                        };     
-                        return {
-                            send: false,
-                            result
-                        }
-                        break
-                    case 'read':
-                        if(n.isNaN)return {
-                            send: false,
-                            result: '**Not a note.**'
-                        }
-                        notes = NotesHandler.getNotes()
-                        note = notes[Object.keys(notes)[n-1]]
-                        //console.log(note)
-                        if(note===undefined)return {
-                            send: false,
-                            result: 'Not a note.'
-                        }
-                        openModal(() => React.createElement(Modal,{note, all:false,del:false}))
+                        let note = NotesHandler.getNote(out['messageID'])
+                        if(out['valid']===false || note===undefined) openModal(() => React.createElement(Modal,{all:true}))
+                        else openModal(() => React.createElement(Modal,{note, all:false, del:false}))
                         break
                 }
             },
             autocomplete: (args) => {
-			    if (args.length !== 1) {
-				    return false;
-			    }
-                let options = {
-                    read: 'Shows Note as embed given it\'s number',
-                    open: 'Opens the Nth Page of Notebook, with 10 notes/page.',
-                    write: 'Writes Note given it\'s message link',
-                    erase: 'Erases Note from your Notebook given it\'s number.'
+                if (args.length !== 1) {
+                    return false;
                 }
-			    return {
-				    commands: Object.keys(options)
-					    .filter((option) => option.includes(args[0].toLowerCase()))
-					    .map((option) => ({
-						    command: option,
-						    description: options[option],
-					    })),
-				    header: 'Notebook commands',
-			    };
-		    }
+                let options = {
+                    open: 'Opens Notebook or a Note if given it\'s Link, Index or Message ID',
+                    write: 'Writes Note given it\'s Message Link',
+                    erase: 'Erases Note from your Notebook given it\'s Link, Index or Message ID'
+                }
+                return {
+                    commands: Object.keys(options)
+                        .filter((option) => option.includes(args[0].toLowerCase()))
+                        .map((option) => ({
+                            command: option,
+                            description: options[option],
+                        })),
+                    header: 'Notebook commands',
+                };
+            }
         }) 
     }
 
@@ -186,26 +126,51 @@ module.exports = class Notebook extends Plugin {
     }
 
     async _injectToolbar() {
-	    const MiniPopover = await getModule((m) => m?.default?.displayName === "MiniPopover");
+        const MiniPopover = await getModule((m) => m?.default?.displayName === "MiniPopover");
         inject("note-toolbar", MiniPopover, "default", (args, res) => {
-		    const props = findInReactTree(res, (r) => r?.message);
-		    const channel = findInReactTree(args, (r) => r?.channel);
-		    if (!props) return res;
-            //console.log(channel.channel.guild_id)
-		    res.props.children.unshift(
-			    React.createElement(NoteButton, {
+            const props = findInReactTree(res, (r) => r?.message);
+            const channel = findInReactTree(args, (r) => r?.channel);
+            if (!props) return res;
+            res.props.children.unshift(
+                React.createElement(NoteButton, {
                     message: props.message,
                     channel: channel.channel
-			    })
-		    );
-		    return res;
-	    });
-	    MiniPopover.default.displayName = "MiniPopover";
+                })
+            );
+            return res;
+        });
+        MiniPopover.default.displayName = "MiniPopover";
     }
     argHandler(args){
         let out = {
             link: null,
-            messageID: null
+            messageID: null,
+            valid: false
+        }
+        let linkArray
+        let note
+        if(args.includes('/')){
+            linkArray = args.split('/')            
+            out['link'] = args
+            out['messageID'] = linkArray[linkArray.length-1]
+            out['valid'] = true
+        }else if(args.length>8){
+            try{
+                out['link'] = NotesHandler.getNote(args)['Message_URL']
+                out[messageID] = args
+                out['valid'] = true
+            }catch(err){}
+        }else if(!isNaN(Number(args))){
+            note = NotesHandler.getNotes()
+            try{
+                note = note[Object.keys(note)[Number(args)-1]]
+                out['link'] = note['Message_URL']
+                out['messageID'] = note['Message_ID']
+                out['valid'] = true
+            }catch(err){}
+        }
+        if((out['link'] && out['messageID'])===undefined){
+            out['valid'] = false
         }
         return out
     }
