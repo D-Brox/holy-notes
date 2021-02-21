@@ -4,16 +4,16 @@
 
 ### Description:
 
-Saving and deleting notes is fully functional. To save a note, right click a message, click the "Note Message" button on the toolbar, or add through command with message link. 
+To save a note, right click a message, use the button on the toolbar or save through command. To delete note, use  the delete button on the Notebook or delete through command.
 
 Notebook Commands:
 
-- .notebook read [N]: Shows Note given it's number. You can use 'last' instead of a number to get the last note
-- .notebook open [N]: Opens the Nth Page of Notebook, with 10 notes/page. You can use 'last' instead of a number to get the last page
-- .notebook write [link]: Writes Note given it's message link,
-- .notebook erase [N] please: Erases Note from your Notebook given it's number.
+- [prefix]notebook open [...]: Opens Notebook, or a Note if given it's Link, Index or Message ID
+- [prefix]notebook write [link]: Writes Note given it's Message Link
+- [prefix]notebook erase [arg]: Erases Note from your Notebook given it's Link, Index or Message ID
 
  
 ### TODO:
 
-Add buttons to Modal (jump to message and delete note).
+- Add jump to message in modal
+- Fix button position in modal

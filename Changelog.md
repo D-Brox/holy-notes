@@ -1,8 +1,15 @@
-# 1.1.4 / 2021-02- 20
+# 1.2.0 / 2021-02-21
+
+ * added buttons in modal
+ * delete button and view button functional
+ * modal now also displays isolated messages
+ * reworked notebook command
+
+# 1.1.4 / 2021-02-20
 
  * added modal for .notebook read command
 
-# 1.1.3 / 2021-02- 20
+# 1.1.3 / 2021-02-20
 
  * fixed modal
  * remade saveMessage()
