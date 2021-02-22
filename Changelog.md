@@ -1,6 +1,13 @@
+# 1.2.2 / 2021-02-22
+
+ * fix layout in modal
+ * "shiny effects".css
+
 # 1.2.1 / 2021-02-21
 
  * mentions now show in the Notebook
+
+
 # 1.2.0 / 2021-02-21
 
  * added buttons in modal
@@ -8,9 +15,11 @@
  * modal now also displays isolated messages
  * reworked notebook command
 
+
 # 1.1.4 / 2021-02-20
 
  * added modal for .notebook read command
+
 
 # 1.1.3 / 2021-02-20
 
