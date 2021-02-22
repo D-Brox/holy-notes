@@ -36,7 +36,7 @@ class noteDisplay extends React.PureComponent {
                 let note = notes[Object.keys(notes)[i]]
                 let divider
                 const user = UserStore.getUser(note['User_ID']);
-                NoteMessage = <div className='NoteMessages'>
+                NoteMessage = <div className='hn-note'>
                     <ChannelMessage
                         message={
                             new Message({
@@ -48,23 +48,41 @@ class noteDisplay extends React.PureComponent {
                                 id: note['Message_ID']
                         })}
                         channel={channel}
-                    /><Tooltip position='top'>
-                        <Icon name='Reply' color='var(--interactive-normal)' onClick={closeModal}/>
-                        <Icon name='Search' color='var(--interactive-normal)' onClick={() => {
-                            openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))
-                        }}/>
-                        <Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
-                            openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
-                            this.forceUpdate()
-                        }}/>
-                    </Tooltip>
+                    />
+                    <div className='hn-tools'>
+                        <div className='hn-tool-jump'>
+                            <Tooltip position='right'>
+                                <Icon name='Reply'
+                                    className='hn-jump-icon'
+                                    onClick={closeModal}/>
+                            </Tooltip>
+                        </div><div className='hn-tool-delete'>
+                            <Tooltip position='right'>
+                                <Icon name='Trash'
+                                    className='hn-delete-icon'
+                                    onClick={() => {
+                                    openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
+                                    this.forceUpdate()
+                                }}/>
+                            </Tooltip>
+                        </div><div className='hn-tool-expand'>
+                            <Tooltip position='right'>
+                                <Icon name='Fullscreen'
+                                    className='hn-expand-icon'
+                                    onClick={() => {
+                                        openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))
+                                    }}
+                                    />
+                            </Tooltip>
+                        </div>
+                    </div>
                 </div>
                 noteArray.push(NoteMessage)
-                
+                noteArray.push(<br/>)
                 divider = (i===(Object.keys(notes).length-1))?<></>:<Divider/>
                 noteArray.push(divider)
-                noteArray.push(<br/>)
             }
+            noteArray.push(<br/>)
             title = 'Notebook'
             size = Modal.Sizes.LARGE
         } else {
@@ -72,14 +90,14 @@ class noteDisplay extends React.PureComponent {
             const user = UserStore.getUser(note['User_ID']);
             UIelements = <></>
             
-            title = 'Message '+note['Message_ID']
-            size = Modal.Sizes.MEDIUM
+            title = 'Note '+note['Message_ID']
+            size = Modal.Sizes.LARGE
             if(this.props.del){
                 title = 'Delete Message '+note['Message_ID']+'?'
                 buttons= []
                 buttons.push(
                     <Button
-                        className='delete button'
+                        className='hn-note-delete'
                         color={Button.Colors.RED}
                         onClick={ () => {
                             closeModal()
@@ -90,7 +108,7 @@ class noteDisplay extends React.PureComponent {
                 )
                 buttons.push(
                     <Button
-                        className='cancel button'
+                        className='chn-note-cancel'
                         style={{ marginRight: "10px" }} 
                         color={Button.Colors.GRAY}
                         onClick={closeModal}
@@ -98,21 +116,35 @@ class noteDisplay extends React.PureComponent {
                     </Button>)
             }else {
                 buttons=<Button
-                    className='delete button'
+                    className='hn-jump'
                     color={Button.Colors.GRAY}
-                    onClick={closeModal}
+                    onClick={closeModal}// need to add jumpToMessage function
                 >Jump To Message
                 </Button>
-                UIelements = <Tooltip position='top'>
-                    <Icon name='Reply' color='var(--interactive-normal)' onClick={closeModal}/>
-                    <Icon name='Trash' color='var(--interactive-normal)' onClick={() => {
-                        openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
-                        this.forceUpdate()
-                    }}/>
-                </Tooltip>
+                
+                UIelements = <div className='hn-tools2'>
+                    <div className='hn-tool-jump'>
+                        <Tooltip position='right'>
+                            <Icon name='Reply'
+                                className='hn-jump-icon'
+                                onClick={closeModal}
+                            />
+                        </Tooltip>
+                    </div><div className='hn-tool-delete'>
+                        <Tooltip position='right'>
+                            <Icon name='Trash'
+                                className='hn-delete-icon'
+                                onClick={() => {
+                                    openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
+                                    this.forceUpdate()
+                                }}
+                            />
+                        </Tooltip>
+                    </div>
+                    <br/>
+                </div>
             }
-
-            NoteMessage = <div className='NoteMessages'>
+            NoteMessage = <div className='hn-note'>
                 <ChannelMessage
                     message={
                         new Message({
@@ -126,11 +158,12 @@ class noteDisplay extends React.PureComponent {
                     channel={channel}
                 />
                 {UIelements}
+                <br/>
             </div>
             noteArray.push(NoteMessage)
         }
         try{return(    
-        <Modal className='Notebook' size={size}>
+        <Modal className='hn-notebook' size={size}>
             <Modal.Header>
                 <FormTitle tag='h3'>{title}</FormTitle>
                 <Modal.CloseButton onClick={closeModal}/>
@@ -148,3 +181,4 @@ class noteDisplay extends React.PureComponent {
 }
 
 module.exports = noteDisplay;
+
