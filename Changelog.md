@@ -1,3 +1,6 @@
+# 1.2.1 / 2021-02-21
+
+ * mentions now show in the Notebook
 # 1.2.0 / 2021-02-21
 
  * added buttons in modal

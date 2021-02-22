@@ -44,6 +44,7 @@ class noteDisplay extends React.PureComponent {
                                 content: note['Content'],
                                 attachments: note['Attachment'] || [],
                                 embeds: note['Embeds'] || [],
+                                mentions: note['Mentions'] || [],
                                 id: note['Message_ID']
                         })}
                         channel={channel}
@@ -119,6 +120,7 @@ class noteDisplay extends React.PureComponent {
                             content: note['Content'],
                             attachments: note['Attachment'] || [],
                             embeds: note['Embeds'] || [],
+                            mentions: note['Mentions'] || [],
                             id: note['Message_ID']
                     })}
                     channel={channel}

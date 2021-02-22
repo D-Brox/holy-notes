@@ -83,6 +83,7 @@ class NotesHandler {
 
             let attached = message.attachments
             let embeded = message.embeds
+			let mentioned = message.mentions
             embeded =  embeded.filter(embed => !embed['__mlembed']);
             for(let i = 0; i < embeded.length; i++){
                 if(embeded[i].timestamp)embeded[i].timestamp=null
@@ -99,6 +100,7 @@ class NotesHandler {
             }
             if (attached) noteFormat['Attachment'] = attached
             if (embeded) noteFormat['Embeds'] = embeded
+			if (mentioned) noteFormat['Mentions'] = mentioned
             this.setNote(noteFormat)} catch(err){console.log(err)}
     }
 }
