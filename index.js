@@ -7,7 +7,7 @@ const { findInReactTree } = require('powercord/util')
 const NotesHandler = new (require('./NotesHandler'))()
 
 /* TODO:
-Fix Buttons in Modal
+Fix jump button
 */
 
 const NotebookButton = require('./components/NotebookButton')
@@ -19,6 +19,7 @@ module.exports = class Notebook extends Plugin {
         this._injectHeaderBarContainer()
         this._injectContextMenu()
         this._injectToolbar()
+        this.loadStylesheet('style.css')
         
         powercord.api.commands.registerCommand({
             command: 'notebook',

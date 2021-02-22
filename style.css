@@ -1,0 +1,81 @@
+.hn-note {
+    position: relative;
+    top:20px;
+}
+
+.hn-note:hover {
+    background: var(--background-modifier-hover);
+    transition: background 0.2s;
+}
+
+.hn-tools {
+    position:absolute;
+    border-radius: 5px 5px 5px 5px;
+    top: -15px;
+    right: 0px;
+    height: 30px;
+    width: 90px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.hn-note:hover .hn-tools {
+    background: var(--background-floating);
+    opacity: 1;
+}
+
+.hn-note:hover .hn-tools2 {
+    background: var(--background-floating);
+    opacity: 1;
+}
+
+.hn-tool-jump {  
+    position: relative;
+    top: 2px;
+    right:-5px;
+}
+.hn-tool-delete {  
+    position: relative;
+    top:-24px;
+    right:-31px;
+}
+
+.hn-tool-expand {  
+    position: relative;
+    top:-51px;
+    right:-60px;
+}
+
+.hn-tools2 {
+    position:absolute;
+    border-radius: 5px 5px 5px 5px;
+    top: -15px;
+    right: 0px;
+    height: 30px;
+    width: 60px;
+    opacity: 0;
+    transition: background 0.2s;
+}
+
+
+.hn-tool-jump .hn-jump-icon {  
+    color: var(--interactive-active);
+}
+.hn-tool-delete .hn-delete-icon {  
+    color: var(--interactive-active); 
+}
+
+.hn-tool-expand .hn-expand-icon {  
+    color: var(--interactive-active); 
+}
+
+.hn-tool-jump:hover .hn-jump-icon {  
+    color: #66CDAA; 
+}
+.hn-tool-delete:hover .hn-delete-icon {  
+    color: #FF6347; 
+}
+
+.hn-tool-expand:hover .hn-expand-icon {  
+    color: #4682B4; 
+}
