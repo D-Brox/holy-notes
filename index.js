@@ -19,6 +19,7 @@ module.exports = class Notebook extends Plugin {
         this._injectHeaderBarContainer()
         this._injectContextMenu()
         this._injectToolbar()
+        this.loadStylesheet('style.css')
         
         powercord.api.commands.registerCommand({
             command: 'notebook',
