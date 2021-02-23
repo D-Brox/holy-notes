@@ -77,12 +77,12 @@ class NotesHandler {
                 messageLink = args
             }
             else {
-							message = args.message
-							if (args.channel.type === 1 || args.channel.type === 3) {
-								messageLink = `https://discord.com/channels/@me/${args.channel.id}/${args.message.id}`
-							} else {
-								messageLink = `https://discord.com/channels/${args.channel.guild_id}/${args.channel.id}/${args.message.id}`
-							}
+		message = args.message
+		if (args.channel.type === 1 || args.channel.type === 3) {
+			messageLink = `https://discord.com/channels/@me/${args.channel.id}/${args.message.id}`
+		} else {
+			messageLink = `https://discord.com/channels/${args.channel.guild_id}/${args.channel.id}/${args.message.id}`
+		}
             }
 
             let attached = message.attachments
