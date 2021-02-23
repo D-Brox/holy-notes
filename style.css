@@ -31,19 +31,22 @@
 
 .hn-tool-jump {  
     position: relative;
-    top: 2px;
+    top: 3px;
     right:-5px;
+    width: 27px;
 }
 .hn-tool-delete {  
     position: relative;
     top:-24px;
-    right:-31px;
+    right:-33px;
+    width: 27px;
 }
 
 .hn-tool-expand {  
     position: relative;
     top:-51px;
-    right:-60px;
+    right:-61px;
+    width: 27px;
 }
 
 .hn-tools2 {
