@@ -1,8 +1,9 @@
-const { getModule, getModuleByDisplayName, React } = require('powercord/webpack');
+const { getModule, getModuleByDisplayName, React} = require('powercord/webpack');
 const { Modal } = require('powercord/components/modal');
 const { FormTitle, Text, Divider, Tooltip, Icon, Button } = require('powercord/components');
-const { close: closeModal, open: openModal } = require('powercord/modal');
+const { close: closeModal, closeAll: closeModals, open: openModal } = require('powercord/modal');
 const { getCurrentUser, getUser } = getModule([ 'getCurrentUser' ], false);
+const { transitionTo } = getModule([ 'transitionTo' ], false);
 
 const NotesHandler = new (require('../NotesHandler'))();
 const Message = getModule(m => m.prototype && m.prototype.getReaction && m.prototype.isSystemDM, false);
@@ -51,13 +52,16 @@ class noteDisplay extends React.PureComponent {
                     />
                     <div className='hn-tools'>
                         <div className='hn-tool-jump'>
-                            <Tooltip position='right'>
-                                <Icon name='Reply'
+                            <Tooltip position='top' text="Jump to Message">
+                                <Icon name='Search'
                                     className='hn-jump-icon'
-                                    onClick={closeModal}/>
+                                    onClick={()=>{
+                                        transitionTo(note["Message_URL"].split("https://discord.com").join(""))
+                                        closeModal()
+                                }}/>
                             </Tooltip>
                         </div><div className='hn-tool-delete'>
-                            <Tooltip position='right'>
+                            <Tooltip position='top' text="Delete Note">
                                 <Icon name='Trash'
                                     className='hn-delete-icon'
                                     onClick={() => {
@@ -66,7 +70,7 @@ class noteDisplay extends React.PureComponent {
                                 }}/>
                             </Tooltip>
                         </div><div className='hn-tool-expand'>
-                            <Tooltip position='right'>
+                            <Tooltip position='top' text="Isolated Message">
                                 <Icon name='Fullscreen'
                                     className='hn-expand-icon'
                                     onClick={() => {
@@ -115,23 +119,21 @@ class noteDisplay extends React.PureComponent {
                     >Cancel
                     </Button>)
             }else {
-                buttons=<Button
-                    className='hn-jump'
-                    color={Button.Colors.GRAY}
-                    onClick={closeModal}// need to add jumpToMessage function
-                >Jump To Message
-                </Button>
+                buttons=<></>
                 
                 UIelements = <div className='hn-tools2'>
                     <div className='hn-tool-jump'>
-                        <Tooltip position='right'>
-                            <Icon name='Reply'
-                                className='hn-jump-icon'
-                                onClick={closeModal}
-                            />
-                        </Tooltip>
+                            <Tooltip position='top' text="Jump to Message">
+                                <Icon name='Search'
+                                    className='hn-jump-icon'
+                                    onClick={()=>{
+                                        transitionTo(note["Message_URL"].split("https://discord.com").join(""))
+                                        closeModals()
+                                }}
+                                />
+                            </Tooltip>
                     </div><div className='hn-tool-delete'>
-                        <Tooltip position='right'>
+                        <Tooltip position='top' text="Delete Note">
                             <Icon name='Trash'
                                 className='hn-delete-icon'
                                 onClick={() => {
