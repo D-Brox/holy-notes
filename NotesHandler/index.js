@@ -78,7 +78,7 @@ class NotesHandler {
             }
             else {
                 message = args.message
-                messageLink = `https://discord.com/channels/${args.channel.guild_id}/${args.channel.id}/${args.message.id}`
+                messageLink = `https://discord.com/channels/${args.channel.guild_id?args.channel.guild_id:'@me'}/${args.channel.id}/${args.message.id}`
             }
 
             let attached = message.attachments

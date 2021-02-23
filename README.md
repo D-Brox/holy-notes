@@ -16,3 +16,8 @@ Notebook Commands:
 #### TODO:
 
 - Polishing?
+
+#### Quick notes:
+
+* Notes with embeds added before 1.2.0 may break notebook and crash discord if they have a timestamp. To fix, just delete the timestamp inside the embed in notes.json
+* You may be unable to jump to DM notes added before 1.2.4 . To fix, replace the 'null'  segment of the 'Message_URL' with '@me' in notes.json
