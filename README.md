@@ -1,5 +1,5 @@
 # Holy Notes
- A Powercord plugin that lets you keep messages in a Notebook, as personal pins. (Work in Progress)
+ A Powercord plugin that lets you keep messages in a Notebook, as personal pins.
 
 
 ### Description:
@@ -13,7 +13,6 @@ Notebook Commands:
 - [prefix]notebook erase [arg]: Erases Note from your Notebook given it's Link, Index or Message ID
 
  
-### TODO:
+#### TODO:
 
-- Add jump to message in modal
-- Fix button position in modal
+- Polishing?
