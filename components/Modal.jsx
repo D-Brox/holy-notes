@@ -70,7 +70,7 @@ class noteDisplay extends React.PureComponent {
                                 }}/>
                             </Tooltip>
                         </div><div className='hn-tool-expand'>
-                            <Tooltip position='top' text="Isolated Message">
+                            <Tooltip position='top' text="Isolate Message">
                                 <Icon name='Fullscreen'
                                     className='hn-expand-icon'
                                     onClick={() => {
@@ -112,7 +112,7 @@ class noteDisplay extends React.PureComponent {
                 )
                 buttons.push(
                     <Button
-                        className='chn-note-cancel'
+                        className='hn-note-cancel'
                         style={{ marginRight: "10px" }} 
                         color={Button.Colors.GRAY}
                         onClick={closeModal}
