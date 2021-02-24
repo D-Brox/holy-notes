@@ -21,3 +21,6 @@ Notebook Commands:
 
 * Notes with embeds added before 1.2.0 may break notebook and crash discord if they have a timestamp. To fix, just delete the timestamp inside the embed in notes.json
 * You may be unable to jump to DM notes added before 1.2.4 . To fix, replace the 'null'  segment of the 'Message_URL' with '@me' in notes.json
+* If you don't have a user cached and there is a note from that user, it may crash discord. This will be fixed in 1.2.5.
+
+* Please report any crash not associated with the ones above. It may be a problem of compatibility with other plugins.
