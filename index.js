@@ -78,7 +78,7 @@ module.exports = class Notebook extends Plugin {
         const getSetting = (setting) => this.settings.get(setting);
         powercord.api.settings.registerSettings('note-settings', {
             category: this.entityID,
-            label: 'Note Messages',
+            label: 'Holy Notes',
             render: Settings
         });
     }
