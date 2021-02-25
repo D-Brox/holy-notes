@@ -4,7 +4,6 @@ const { inject, uninject } = require('powercord/injector')
 const { React, getModule, getModuleByDisplayName} = require('powercord/webpack')
 const { open: openModal } = require('powercord/modal')
 const { findInReactTree } = require('powercord/util')
-
 const NotesHandler = new (require('./NotesHandler'))()
 const Settings = require('./components/Settings');
 
@@ -15,15 +14,6 @@ const Modal = require('./components/Modal')
 
 module.exports = class Notebook extends Plugin {
     async startPlugin () {
-
-        const getSetting = (setting) => this.settings.get(setting);
-
-        powercord.api.settings.registerSettings('note-settings', {
-            category: this.entityID,
-            label: 'Note Messages',
-            render: Settings
-        });
-
         this._injectHeaderBarContainer()
         this._injectContextMenu()
         this._injectToolbar()
@@ -83,7 +73,14 @@ module.exports = class Notebook extends Plugin {
                     header: 'Notebook commands',
                 };
             }
-        }) 
+        })
+        
+        const getSetting = (setting) => this.settings.get(setting);
+        powercord.api.settings.registerSettings('note-settings', {
+            category: this.entityID,
+            label: 'Note Messages',
+            render: Settings
+        });
     }
 
     pluginWillUnload () {
