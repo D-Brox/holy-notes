@@ -5,13 +5,9 @@ const { React, getModule, getModuleByDisplayName} = require('powercord/webpack')
 const { open: openModal } = require('powercord/modal')
 const { findInReactTree } = require('powercord/util')
 
-
 const NotesHandler = new (require('./NotesHandler'))()
 const Settings = require('./components/Settings');
 
-/* TODO:
-Fix jump button
-*/
 
 const NotebookButton = require('./components/NotebookButton')
 const NoteButton = require('./components/NoteButton')
