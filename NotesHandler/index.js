@@ -29,6 +29,7 @@ class NotesHandler {
 		} catch {
 			return null
 		}
+		return note
 	}
 
 	setNote = (noteData) => {
