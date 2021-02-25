@@ -16,3 +16,4 @@ Notebook Commands:
 #### TODO:
 
 - Polishing?
+- 1.3.0 Multiple Notebooks feature
