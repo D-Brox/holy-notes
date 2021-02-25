@@ -5,10 +5,8 @@ const { React, getModule, getModuleByDisplayName} = require('powercord/webpack')
 const { open: openModal } = require('powercord/modal')
 const { findInReactTree } = require('powercord/util')
 const NotesHandler = new (require('./NotesHandler'))()
+const Settings = require('./components/Settings');
 
-/* TODO:
-Fix jump button
-*/
 
 const NotebookButton = require('./components/NotebookButton')
 const NoteButton = require('./components/NoteButton')
@@ -36,7 +34,7 @@ module.exports = class Notebook extends Plugin {
                 }
                 switch(args[0]){               
                     case 'write':
-                        NotesHandler.saveNote(out['link'],true)
+                        NotesHandler.saveNote(out['link'],true,'0')
                         return {
                             send: false,
                             result: 'Note **'+out['messageID']+'** added'
@@ -75,14 +73,22 @@ module.exports = class Notebook extends Plugin {
                     header: 'Notebook commands',
                 };
             }
-        }) 
+        })
+        
+        const getSetting = (setting) => this.settings.get(setting);
+        powercord.api.settings.registerSettings('note-settings', {
+            category: this.entityID,
+            label: 'Note Messages',
+            render: Settings
+        });
     }
 
     pluginWillUnload () {
-        uninject('note-button')
-        uninject('note-context-menu')
-        uninject('note-toolbar')
-        powercord.api.commands.unregisterCommand('notebook')
+        uninject('note-button');
+        uninject('note-context-menu');
+        uninject('note-toolbar');
+        powercord.api.commands.unregisterCommand('notebook');
+        powercord.api.settings.unregisterSettings('note-settings');
     }
 
     async _injectHeaderBarContainer () {

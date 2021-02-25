@@ -25,7 +25,7 @@ class NoteButton extends React.PureComponent {
                     <Button
                         className={`note-button`}
                         onClick={(e) => {
-                            NotesHandler.saveNote(this.props,false)
+                            NotesHandler.saveNote(this.props,false,'0')
                             }}
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}

@@ -1,6 +1,6 @@
 const { getModule, getModuleByDisplayName, React} = require('powercord/webpack');
 const { Modal } = require('powercord/components/modal');
-const { FormTitle, Text, Divider, Tooltip, Icon, Button } = require('powercord/components');
+const { FormTitle, Divider, Tooltip, Icon, Button } = require('powercord/components');
 const { close: closeModal, closeAll: closeModals, open: openModal } = require('powercord/modal');
 const { getCurrentUser, getUser } = getModule([ 'getCurrentUser' ], false);
 const { transitionTo } = getModule([ 'transitionTo' ], false);
@@ -9,6 +9,7 @@ const NotesHandler = new (require('../NotesHandler'))();
 const Message = getModule(m => m.prototype && m.prototype.getReaction && m.prototype.isSystemDM, false);
 const UserStore = getModule([ 'getCurrentUser' ], false);
 const ChannelMessage = getModule(m => m.type && m.type.displayName == 'ChannelMessage', false)
+
 
 const channel = {
     isPrivate: () => false,
@@ -31,71 +32,94 @@ class noteDisplay extends React.PureComponent {
         let size
         let buttons = <></>
         let UIelements
+
         if(this.props.all){
             const notes = NotesHandler.getNotes();
             for(let i = 0; i < Object.keys(notes).length; i++) {
                 let note = notes[Object.keys(notes)[i]]
-                let divider
-                const user = UserStore.getUser(note['User_ID']);
-                NoteMessage = <div className='hn-note'>
-                    <ChannelMessage
-                        message={
-                            new Message({
-                                author: user,
-                                content: note['Content'],
-                                attachments: note['Attachment'] || [],
-                                embeds: note['Embeds'] || [],
-                                mentions: note['Mentions'] || [],
-                                id: note['Message_ID']
-                        })}
-                        channel={channel}
-                    />
-                    <div className='hn-tools'>
-                        <div className='hn-tool-jump'>
-                            <Tooltip position='top' text="Jump to Message">
-                                <Icon name='Search'
-                                    className='hn-jump-icon'
-                                    onClick={()=>{
-                                        transitionTo(note["Message_URL"].split("https://discord.com").join(""))
-                                        closeModal()
-                                }}/>
-                            </Tooltip>
-                        </div><div className='hn-tool-delete'>
-                            <Tooltip position='top' text="Delete Note">
-                                <Icon name='Trash'
-                                    className='hn-delete-icon'
-                                    onClick={() => {
-                                    openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
-                                    this.forceUpdate()
-                                }}/>
-                            </Tooltip>
-                        </div><div className='hn-tool-expand'>
-                            <Tooltip position='top' text="Isolate Message">
-                                <Icon name='Fullscreen'
-                                    className='hn-expand-icon'
-                                    onClick={() => {
-                                        openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))
-                                    }}
-                                    />
-                            </Tooltip>
+                note = NotesHandler.noteFixer(note)
+                const User = getModule(m => m.prototype && m.prototype.tag, false);
+                const user = new User({
+                    id: note["User_ID"],
+                    username: note['Username'],
+                    avatar: note['Avatar'],
+                    discriminator: note['discriminator']
+                })
+                console.log(note)
+                if(note['Notebook']==='0'){
+                    NoteMessage = <div className='hn-note'>
+                        <ChannelMessage
+                            message={
+                                new Message({
+                                    author: user,
+                                    content: note['Content'],
+                                    attachments: note['Attachment'] || [],
+                                    embeds: note['Embeds'] || [],
+                                    mentions: note['Mentions'] || [],
+                                    id: note['Message_ID']
+                            })}
+                            channel={channel}
+                        />
+                        <div className='hn-tools'>
+                            <div className='hn-tool-jump'>
+                                <Tooltip position='top' text="Jump to Message">
+                                    <Icon name='Search'
+                                        className='hn-jump-icon'
+                                        onClick={()=>{
+                                        transitionTo(note["Message_URL"].split('discord.com')[1])
+                                            closeModal()
+                                    }}/>
+                                </Tooltip>
+                            </div><div className='hn-tool-delete'>
+                                <Tooltip position='top' text="Delete Note">
+                                    <Icon name='Trash'
+                                        className='hn-delete-icon'
+                                        onClick={() => {
+                                        openModal(() => React.createElement(noteDisplay,{note,all:false,del:true}))
+                                        this.forceUpdate()
+                                    }}/>
+                                </Tooltip>
+                            </div><div className='hn-tool-expand'>
+                                <Tooltip position='top' text="Isolate Message">
+                                    <Icon name='Fullscreen'
+                                        className='hn-expand-icon'
+                                        onClick={() => {
+                                            openModal(() => React.createElement(noteDisplay,{note,all:false,del:false}))
+                                        }}
+                                        />
+                                </Tooltip>
+                            </div>
                         </div>
                     </div>
-                </div>
-                noteArray.push(NoteMessage)
-                noteArray.push(<br/>)
-                divider = (i===(Object.keys(notes).length-1))?<></>:<Divider/>
-                noteArray.push(divider)
+                    noteArray.push(NoteMessage)
+                    noteArray.push(<br/>)
+                    let lastNote = true;
+                    for(let j=i+1;j < Object.keys(notes).length; j++){
+                        if (notes[Object.keys(notes)[j]]['Notebook']==='0'){
+                            lastNote = false;
+                            break
+                        }
+                    }                   
+                    noteArray.push(lastNote?<></>:<Divider/>)
+                }
             }
             noteArray.push(<br/>)
             title = 'Notebook'
-            size = Modal.Sizes.LARGE
+            size = Modal.Sizes.LARGE    
         } else {
-            const note = this.props.note
-            const user = UserStore.getUser(note['User_ID']);
+            let note = this.props.note
+            note = NotesHandler.noteFixer(note)
+            const User = getModule(m => m.prototype && m.prototype.tag, false);
+            const user = new User({
+                id: note["User_ID"],
+                username: note['Username'],
+                avatar: note['Avatar'],
+                discriminator: note['discriminator']
+            })
             UIelements = <></>
             
             title = 'Note '+note['Message_ID']
-            size = Modal.Sizes.LARGE
+            size = Modal.Sizes.MEDIUM
             if(this.props.del){
                 title = 'Delete Message '+note['Message_ID']+'?'
                 buttons= []
@@ -127,7 +151,7 @@ class noteDisplay extends React.PureComponent {
                                 <Icon name='Search'
                                     className='hn-jump-icon'
                                     onClick={()=>{
-                                        transitionTo(note["Message_URL"].split("https://discord.com").join(""))
+                                        transitionTo(note["Message_URL"].split("discord.com")[1])
                                         closeModals()
                                 }}
                                 />
@@ -159,8 +183,8 @@ class noteDisplay extends React.PureComponent {
                     })}
                     channel={channel}
                 />
-                {UIelements}
                 <br/>
+                {UIelements}
             </div>
             noteArray.push(NoteMessage)
         }
@@ -173,6 +197,7 @@ class noteDisplay extends React.PureComponent {
 
             <Modal.Content>
                     {noteArray}
+
             </Modal.Content>
             <Modal.Footer>
                 {buttons}

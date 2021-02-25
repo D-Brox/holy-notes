@@ -1,3 +1,13 @@
+# 1.2.5 / 2021-02-25
+
+* added noteFixer() for compatibility with older notes
+* bug fixes involving crashes
+* preparations for new features in 1.3.0
+
+# 1.2.4 / 2021-02-23
+
+* fix jump to message in DM notes
+
 # 1.2.3 / 2021-02-23
 
  * fix jump to message button
@@ -11,14 +21,12 @@
 
  * mentions now show in the Notebook
 
-
 # 1.2.0 / 2021-02-21
 
  * added buttons in modal
  * delete button and view button in modal are now functional
  * modal now also displays isolated messages
  * reworked notebook command
-
 
 # 1.1.4 / 2021-02-20
 

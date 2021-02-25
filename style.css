@@ -4,7 +4,7 @@
 }
 
 .hn-note:hover {
-    background: var(--background-modifier-hover);
+    background: rgba(0,0,0,0.1);
     transition: background 0.2s;
 }
 
@@ -20,12 +20,12 @@
 }
 
 .hn-note:hover .hn-tools {
-    background: var(--background-floating);
+    background: #202020;
     opacity: 1;
 }
 
 .hn-note:hover .hn-tools2 {
-    background: var(--background-floating);
+    background: #202020;
     opacity: 1;
 }
 
