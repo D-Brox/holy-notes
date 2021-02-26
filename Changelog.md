@@ -1,3 +1,7 @@
+# 1.2.6 / 2021-02-25
+
+* fix for contextMenu Avatar_URL crash bug
+
 # 1.2.5 / 2021-02-25
 
 * added noteFixer() for compatibility with older notes
