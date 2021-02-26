@@ -118,10 +118,12 @@ class NotesHandler {
             }
             out["Embeds"] = embeded
             
-            avatar = note["Avatar_URL"].replace(".png","").split("/")
-            avatar = avatar[avatar.length-1]
-            delete note["Avatar_URL"]
-            out["Avatar"] = avatar
+            if(note["Avatar_URL"]){
+            	avatar = note["Avatar_URL"].replace(".png","").split("/")
+            	avatar = avatar[avatar.length-1]
+            	delete note["Avatar_URL"]
+            	out["Avatar"] = avatar
+	    }
 
             out["Discriminator"] = "0000" //hack lol
 
