@@ -45,7 +45,7 @@ class noteDisplay extends React.PureComponent {
                     avatar: note['Avatar'],
                     discriminator: note['discriminator']
                 })
-                console.log(note)
+                //console.log(note)
                 if(note['Notebook']==='0'){
                     NoteMessage = <div className='hn-note'>
                         <ChannelMessage
