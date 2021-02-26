@@ -1,4 +1,4 @@
-# 1.2.6 / 2021-02-25
+# 1.2.6 / 2021-02-26
 
 * fix for contextMenu Avatar_URL crash bug
 
