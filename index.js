@@ -121,7 +121,7 @@ module.exports = class Notebook extends Plugin {
             if (!findInReactTree(res, c => c.props && c.props.id == 'notebook'))
                 res.props.children.splice(4, 0,React.createElement(
                     Menu.MenuGroup, null,React.createElement(Menu.MenuItem,{
-                        action: () => NotesHandler.saveNote(args[0],false),
+                        action: () => NotesHandler.saveNote(args[0],false,'0'),
                         id: 'notebook',
                         label: 'Note Message'
                     }
