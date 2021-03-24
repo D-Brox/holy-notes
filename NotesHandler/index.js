@@ -80,13 +80,16 @@ class NotesHandler {
                 message = args.message
                 messageLink = `https://discord.com/channels/${args.channel.guild_id?args.channel.guild_id:'@me'}/${args.channel.id}/${args.message.id}`
             }
+            //console.log(message)
             let attached = message.attachments
+            //let reply = message.messageReference
             let embeded = message.embeds
-			let mentioned = message.mentions
-            embeded =  embeded.filter(embed => !embed['__mlembed']);
+	    let mentioned = message.mentions
+            let LMAOstickers = message.stickers
+            embeded =  embeded.filter(embed => !embed['__mlembed']); // Plugin compatibility with message link embeds
             for(let i = 0; i < embeded.length; i++){
                 if(embeded[i].timestamp)embeded[i].timestamp=null
-            }
+            } // Workaround
             let noteFormat = {
                 'Message_ID' : message.id,
                 'Username' : message.author.username,
@@ -97,11 +100,14 @@ class NotesHandler {
                 'Message_URL' : messageLink,
                 'Avatar' : message.author.avatar,
                 'Discriminator': message.author.discriminator,
+                //'reactions' : message.reactions,
                 'Notebook': notebook
             }
             if (attached) noteFormat['Attachment'] = attached
             if (embeded) noteFormat['Embeds'] = embeded
-			if (mentioned) noteFormat['Mentions'] = mentioned
+	    if (mentioned) noteFormat['Mentions'] = mentioned
+	    //if (reply) noteFormat['Reply'] = reply
+            if (LMAOstickers) noteFormat['Stickers'] = LMAOstickers
             this.setNote(noteFormat)} catch(err){console.log(err)}
     }
     noteFixer(note){
