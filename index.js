@@ -11,6 +11,7 @@ const Settings = require('./components/Settings');
 const NotebookButton = require('./components/NotebookButton')
 const NoteButton = require('./components/NoteButton')
 const Modal = require('./components/Modal')
+const manifest = require('./manifest.json')
 
 module.exports = class Notebook extends Plugin {
     async startPlugin () {
@@ -18,13 +19,27 @@ module.exports = class Notebook extends Plugin {
         this._injectContextMenu()
         this._injectToolbar()
         this.loadStylesheet('style.css')
+
+        const { version } = manifest
+        if (this.settings.get('version') !== version) {
+          this.settings.set('version', version)
+          powercord.api.notices.sendAnnouncement('Holy-Notes update', {
+            color: 'darkgreen',
+            message: `Holy-notes ${version} successfully installed! Now supports Stickers! (LMAO who uses them?)`,
+            button: {
+              text: 'Click here for more information',
+              onClick: async () => {
+                require('electron').shell.openExternal(`https://www.youtube.com/watch?v=dQw4w9WgXcQ`)
+              }
+            }
+          })
+        }
         
         powercord.api.commands.registerCommand({
             command: 'notebook',
             description: 'Notebook to keep your favourite notes',
             usage: '{c} [ args ]',
             executor: (args) => {
-                //This is truly elegant
                 let out = args[1]?this.argHandler(args[1]):{valid:false}
                 if(out['valid']===false && args[0]!=='open'){
                     return {

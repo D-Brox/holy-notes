@@ -10,7 +10,6 @@ const Message = getModule(m => m.prototype && m.prototype.getReaction && m.proto
 const UserStore = getModule([ 'getCurrentUser' ], false);
 const ChannelMessage = getModule(m => m.type && m.type.displayName == 'ChannelMessage', false)
 
-
 const channel = {
     isPrivate: () => false,
     isSystemDM: () => false,
@@ -24,7 +23,7 @@ class noteDisplay extends React.PureComponent {
 
     async componentDidMount() {
     }
-
+    //I have to clean this up. Some things should be in functions. And I should maybe have multiple modal files.
     render() {
         const noteArray = [];
         let NoteMessage
@@ -47,6 +46,14 @@ class noteDisplay extends React.PureComponent {
                 })
                 //console.log(note)
                 if(note['Notebook']==='0'){
+                    let timestamp = {
+		                'toDate' : () => new Date(note['Timestamp'] ),
+                		'locale' : () => 'en'
+                    }
+                    /*let edit = {
+                        'toDate' : () => new Date(note['Editstamp']),
+                		'locale' : () => 'en'
+                    }*/
                     NoteMessage = <div className='hn-note'>
                         <ChannelMessage
                             message={
@@ -56,7 +63,12 @@ class noteDisplay extends React.PureComponent {
                                     attachments: note['Attachment'] || [],
                                     embeds: note['Embeds'] || [],
                                     mentions: note['Mentions'] || [],
-                                    id: note['Message_ID']
+                                    id: note['Message_ID'],
+                                    //reactions: note['Reactions'],
+                                    stickers: note['Stickers'] || [],
+                                    //messageReference: note['Reply'] || [],
+                                    timestamp: timestamp,
+                                    //editTimestamp: edit || null
                             })}
                             channel={channel}
                         />
@@ -170,6 +182,14 @@ class noteDisplay extends React.PureComponent {
                     <br/>
                 </div>
             }
+            let timestamp = {
+                'toDate' : () => new Date(note['Timestamp'] ),
+        		'locale' : () => 'en'
+            }
+            /*let edit = {
+                'toDate' : () => new Date(note['Editstamp']),
+        		'locale' : () => 'en'
+            }*/
             NoteMessage = <div className='hn-note'>
                 <ChannelMessage
                     message={
@@ -179,7 +199,12 @@ class noteDisplay extends React.PureComponent {
                             attachments: note['Attachment'] || [],
                             embeds: note['Embeds'] || [],
                             mentions: note['Mentions'] || [],
-                            id: note['Message_ID']
+                            id: note['Message_ID'],
+                            //reactions: note['Reactions'] || [],
+                            stickers: note['Stickers'] || [],
+                            //messageReference: note['Reply'] || [],
+                            timestamp: timestamp,
+                            //editTimestamp: edit || null
                     })}
                     channel={channel}
                 />
@@ -208,4 +233,3 @@ class noteDisplay extends React.PureComponent {
 }
 
 module.exports = noteDisplay;
-

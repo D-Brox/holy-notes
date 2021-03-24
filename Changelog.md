@@ -1,3 +1,10 @@
+# 1.2.7 / 2021-03-24
+
+* add update message
+* add sticker support
+* fix timestamps
+* fix decentered note button
+
 # 1.2.6 / 2021-02-26
 
 * fix for contextMenu Avatar_URL crash bug
