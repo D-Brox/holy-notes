@@ -22,17 +22,28 @@ module.exports = class Notebook extends Plugin {
 
         const { version } = manifest
         if (this.settings.get('version') !== version) {
-          this.settings.set('version', version)
-          powercord.api.notices.sendAnnouncement('Holy-Notes update', {
-            color: 'darkgreen',
-            message: `Holy-notes ${version} successfully installed! Now supports Stickers! (LMAO who uses them?)`,
-            button: {
-              text: 'Click here for more information',
-              onClick: async () => {
-                require('electron').shell.openExternal(`https://www.youtube.com/watch?v=dQw4w9WgXcQ`)
-              }
-            }
-          })
+            this.settings.set('version', version)
+            powercord.api.notices.sendAnnouncement('Holy-Notes future', {
+                color: 'red',
+                message: `Holy-notes will be substituted by Note-to-Shelf (hehe funny pun) in a couple of weeks with the new features`,
+                button: {
+                    text: 'Click here for preview on my github',
+                    onClick: async () => {
+                        require('electron').shell.openExternal(`https://en.wikipedia.org/wiki/Rickrolling`)
+                        await new Promise(r => setTimeout(r, 2000));
+                        powercord.api.notices.sendAnnouncement('Holy-Notes real', {
+                            color: 'blue',
+                            message: `You would really fall for that in April 1st?`,
+                            button: {
+                                text: 'Anyway, here is the real link',
+                                onClick: async () => {
+                                    require('electron').shell.openExternal(`https://www.youtube.com/watch?v=dQw4w9WgXcQ`)
+                                }
+                            }
+                        })
+                    }
+                }
+            })
         }
         
         powercord.api.commands.registerCommand({
