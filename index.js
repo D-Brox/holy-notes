@@ -29,7 +29,7 @@ module.exports = class Notebook extends Plugin {
                 button: {
                     text: `I don't have a preview yet but here's the current repo`,
                     onClick: async () => {
-                        require('electron').shell.openExternal(`https://github.com/D-Brox/holy-notes/edit/master/index.js`)
+                        require('electron').shell.openExternal(`https://github.com/D-Brox/holy-notes/`)
                     }
                 }
             })
