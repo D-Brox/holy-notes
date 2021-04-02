@@ -27,20 +27,9 @@ module.exports = class Notebook extends Plugin {
                 color: 'red',
                 message: `Holy-notes will be substituted by Note-to-Shelf (hehe funny pun) in a couple of weeks with the new features`,
                 button: {
-                    text: 'Click here for preview on my github',
+                    text: `I don't have a preview yet but here's the current repo`,
                     onClick: async () => {
-                        require('electron').shell.openExternal(`https://en.wikipedia.org/wiki/Rickrolling`)
-                        await new Promise(r => setTimeout(r, 2000));
-                        powercord.api.notices.sendAnnouncement('Holy-Notes real', {
-                            color: 'blue',
-                            message: `You would really fall for that in April 1st?`,
-                            button: {
-                                text: 'Anyway, here is the real link',
-                                onClick: async () => {
-                                    require('electron').shell.openExternal(`https://www.youtube.com/watch?v=dQw4w9WgXcQ`)
-                                }
-                            }
-                        })
+                        require('electron').shell.openExternal(`https://github.com/D-Brox/holy-notes/edit/master/index.js`)
                     }
                 }
             })
