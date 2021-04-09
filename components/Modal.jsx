@@ -31,7 +31,7 @@ class noteDisplay extends React.PureComponent {
         let size
         let buttons = <></>
         let UIelements
-
+	try{//temp fix for crash, may break some pfp
         if(this.props.all){
             const notes = NotesHandler.getNotes();
             for(let i = 0; i < Object.keys(notes).length; i++) {
@@ -48,7 +48,7 @@ class noteDisplay extends React.PureComponent {
                 if(note['Notebook']==='0'){
                     let timestamp = {
 		                'toDate' : () => new Date(note['Timestamp'] ),
-                		'locale' : () => 'en'
+                                'locale' : () => 'en'
                     }
                     /*let edit = {
                         'toDate' : () => new Date(note['Editstamp']),
@@ -184,7 +184,7 @@ class noteDisplay extends React.PureComponent {
             }
             let timestamp = {
                 'toDate' : () => new Date(note['Timestamp'] ),
-        		'locale' : () => 'en'
+                'locale' : () => 'en'
             }
             /*let edit = {
                 'toDate' : () => new Date(note['Editstamp']),
@@ -229,7 +229,8 @@ class noteDisplay extends React.PureComponent {
             </Modal.Footer>
         </Modal>
         )}catch(err){console.log(err)}
-    }
+    }catch(err){console.log(err)}//temp fix for crash
+    } 
 }
 
 module.exports = noteDisplay;
