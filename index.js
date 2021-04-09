@@ -24,8 +24,8 @@ module.exports = class Notebook extends Plugin {
         if (this.settings.get('version') !== version) {
             this.settings.set('version', version)
             powercord.api.notices.sendAnnouncement('Holy-Notes future', {
-                color: 'red',
-                message: `Holy-notes will be substituted by Note-to-Shelf (hehe funny pun) in a couple of weeks with the new features`,
+                color: 'blue',
+                message: `Holy-notes will be substituted by Note-to-Shelf in a couple of weeks. Also, some pfps are broken, I'm trying to fix it`,
                 button: {
                     text: `I don't have a preview yet but here's the current repo`,
                     onClick: async () => {
