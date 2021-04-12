@@ -46,10 +46,10 @@ class noteDisplay extends React.PureComponent {
                 })
                 //console.log(note)
                 if(note['Notebook']==='0'){
-                    let timestamp = {
-		                'toDate' : () => new Date(note['Timestamp'] ),
-                                'locale' : () => 'en'
-                    }
+                    //let timestamp = {
+		    //            'toDate' : () => new Date(note['Timestamp'] ),
+                    //            'locale' : () => 'en'
+                    //}
                     /*let edit = {
                         'toDate' : () => new Date(note['Editstamp']),
                 		'locale' : () => 'en'
@@ -67,7 +67,7 @@ class noteDisplay extends React.PureComponent {
                                     //reactions: note['Reactions'],
                                     stickers: note['Stickers'] || [],
                                     //messageReference: note['Reply'] || [],
-                                    timestamp: timestamp,
+                                    //timestamp: timestamp,
                                     //editTimestamp: edit || null
                             })}
                             channel={channel}
@@ -182,10 +182,10 @@ class noteDisplay extends React.PureComponent {
                     <br/>
                 </div>
             }
-            let timestamp = {
-                'toDate' : () => new Date(note['Timestamp'] ),
-                'locale' : () => 'en'
-            }
+            //let timestamp = {
+            //    'toDate' : () => new Date(note['Timestamp'] ),
+            //    'locale' : () => 'en'
+            //}
             /*let edit = {
                 'toDate' : () => new Date(note['Editstamp']),
         		'locale' : () => 'en'
@@ -203,7 +203,7 @@ class noteDisplay extends React.PureComponent {
                             //reactions: note['Reactions'] || [],
                             stickers: note['Stickers'] || [],
                             //messageReference: note['Reply'] || [],
-                            timestamp: timestamp,
+                            //timestamp: timestamp,
                             //editTimestamp: edit || null
                     })}
                     channel={channel}
