@@ -10,9 +10,9 @@
 
 .hn-tools {
     position:absolute;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 5px;
     top: -15px;
-    right: 0px;
+    right: 0;
     height: 30px;
     width: 90px;
     opacity: 0;
@@ -51,9 +51,9 @@
 
 .hn-tools2 {
     position:absolute;
-    border-radius: 5px 5px 5px 5px;
+    border-radius: 5px;
     top: -15px;
-    right: 0px;
+    right: 0;
     height: 30px;
     width: 60px;
     opacity: 0;
