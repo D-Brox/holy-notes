@@ -1,17 +1,16 @@
-const { Plugin } = require('powercord/entities')
-const { Tooltip } = require('powercord/components')
-const { inject, uninject } = require('powercord/injector')
-const { React, getModule, getModuleByDisplayName} = require('powercord/webpack')
-const { open: openModal } = require('powercord/modal')
-const { findInReactTree } = require('powercord/util')
-const NotesHandler = new (require('./NotesHandler'))()
+const { Plugin } = require('powercord/entities');
+const { Tooltip } = require('powercord/components');
+const { inject, uninject } = require('powercord/injector');
+const { React, getModule, getModuleByDisplayName} = require('powercord/webpack');
+const { open: openModal } = require('powercord/modal');
+const { findInReactTree } = require('powercord/util');
+const NotesHandler = new (require('./NotesHandler'));
 const Settings = require('./components/Settings');
 
 
-const NotebookButton = require('./components/NotebookButton')
-const NoteButton = require('./components/NoteButton')
-const Modal = require('./components/Modal')
-const manifest = require('./manifest.json')
+const NotebookButton = require('./components/NotebookButton');
+const NoteButton = require('./components/NoteButton');
+const Modal = require('./components/Modal');
 
 module.exports = class Notebook extends Plugin {
     async startPlugin () {
@@ -19,21 +18,6 @@ module.exports = class Notebook extends Plugin {
         this._injectContextMenu()
         this._injectToolbar()
         this.loadStylesheet('style.css')
-
-        const { version } = manifest
-        if (this.settings.get('version') !== version) {
-            this.settings.set('version', version)
-            powercord.api.notices.sendAnnouncement('Holy-Notes future', {
-                color: 'blue',
-                message: `Holy-notes will be substituted by Note-to-Shelf in a couple of weeks. Also, some pfps are broken, I'm trying to fix it`,
-                button: {
-                    text: `I don't have a preview yet but here's the current repo`,
-                    onClick: async () => {
-                        require('electron').shell.openExternal(`https://github.com/D-Brox/holy-notes/`)
-                    }
-                }
-            })
-        }
         
         powercord.api.commands.registerCommand({
             command: 'notebook',
@@ -41,12 +25,12 @@ module.exports = class Notebook extends Plugin {
             usage: '{c} [ args ]',
             executor: (args) => {
                 let out = args[1]?this.argHandler(args[1]):{valid:false}
-                if(out['valid']===false && args[0]!=='open'){
+                /*if(out['valid']===false && args[0]!=='open'){
                     return {
                         send: false,
                         result: 'Please input a valid Link, Index or Message ID'
                     }
-                }
+                }*/
                 switch(args[0]){               
                     case 'write':
                         NotesHandler.saveNote(out['link'],true,'0')
@@ -67,6 +51,19 @@ module.exports = class Notebook extends Plugin {
                         if(out['valid']===false || note===undefined) openModal(() => React.createElement(Modal,{all:true}))
                         else openModal(() => React.createElement(Modal,{note, all:false, del:false}))
                         break
+                    case 'addNotebook':
+                        NotesHandler.addnotebookData(args[1]);
+                        return {
+                            send: false,
+                            result: 'Added Notebook with the name ' + args[1]
+                        }
+                        break
+                    case 'deleteNotebook':
+                        NotesHandler.deleteNotebook(args[1])
+                        return {
+                            send: false,
+                            result: 'Removed Notebook with the name ' + args[1]
+                        }
                 }
             },
             autocomplete: (args) => {
@@ -76,7 +73,9 @@ module.exports = class Notebook extends Plugin {
                 let options = {
                     open: 'Opens Notebook or a Note if given it\'s Link, Index or Message ID',
                     write: 'Writes Note given it\'s Message Link',
-                    erase: 'Erases Note from your Notebook given it\'s Link, Index or Message ID'
+                    erase: 'Erases Note from your Notebook given it\'s Link, Index or Message ID',
+                    addNotebook: 'Adds a Notebook',
+                    deleteNotebook: 'Removes a Notebook'
                 }
                 return {
                     commands: Object.keys(options)
