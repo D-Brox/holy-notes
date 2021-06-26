@@ -9,6 +9,7 @@ const { getMessage } = getModule(['getMessages'], false)
 class NotesHandler {
 	constructor() {
 		this.initNotes()
+		this.initNotebooks()
 	}
 
 	initNotes = () => {
@@ -110,7 +111,7 @@ class NotesHandler {
             if (LMAOstickers) noteFormat['Stickers'] = LMAOstickers
             this.setNote(noteFormat)} catch(err){console.log(err)}
     }
-    noteFixer(note){
+    noteFixer = (note) =>{
         let out
         let avatar
         let embeded
@@ -133,7 +134,7 @@ class NotesHandler {
 
             out["Discriminator"] = "0000" //hack lol
 
-            out["Notebook"] = '0'
+            out["Notebook"] = 0
 
             out["Message_URL"] = out["Message_URL"].replace("null","@me")
 
@@ -142,29 +143,31 @@ class NotesHandler {
         }
 		return note
     }
-}
 
-/* Preparations for 1.3
-class NotebooksHandler {
-	constructor() {
-		this.initNotebooks()
-	}
+// Preparations for 1.3
+// Notebook stuff
+// Doesn't work yet
 
 	initNotebookss = () => {
 		if (!fs.existsSync(notebooksPath)) {
-			fs.writeFileSync(notebooksPath, JSON.stringify({}, null, '\t'))
+		 	Notebooks = {'0': Default, 'active':'0'}
+			fs.writeFileSync(notebooksPath, JSON.stringify(Notebooks, null, '\t'))
 		}
 	}
 
-	getNotebookss = () => {
+	getNotebooks = () => {
 		this.initNotes()
 		return JSON.parse(fs.readFileSync(notebooksPath))
+	}
+	
+	getActiveNotebook = () => {
+		return his.getNotebooks()['active']
 	}
 
 	getNotebook = (notebookIndex) => {
 		let notebook
 		try {
-			notebook = this.getNotes()[notebookIndex]
+			notebook = this.getNotebook()[notebookIndex]
 		} catch {
 			return null
 		}
@@ -180,34 +183,38 @@ class NotebooksHandler {
 			return
 		}
         
-        //deal with stuff here
-		//notes[noteData[messageId]] = {}
-		//let newNoteData = notes[noteData[messageId]]
+		//deal with stuff here
 
-		for (let i = 0; i < Object.keys(noteData).length; i++) {
-			let noteDataName = Object.keys(noteData)[i]
-			let noteDataValue = noteData[noteDataName]
-			newNoteData[noteDataName] = noteDataValue
-		}
 		fs.writeFileSync(notebooksPath, JSON.stringify(notes, null, '\t'))
 	}
-    deleteNotebook = (notebookIndex) => {
-        this.initNotebooks()
+    deleteNotebook = (notebookIndex,reassign,reassingIndex) => {
         let notebooks
 		try {
 			notebooks = this.getNotebooks()
 		} catch {
 			return
 		}
-        //do stuff here
+        //add warning when deleting
+
+	for(let i = 0; i < Object.keys(Notes).length; i++){
+		let note = Notes[Object.keys(Notes)[i]]
+		if (note['notebook']==notebookIndex){
+		        if (reassign==true){
+		        	note['notebook']='0'
+		        	this.setNote(note)
+		        }else note['Message_ID'])
+		}
+        }
+        delete notebooks[notebookIndex]
         fs.writeFileSync(notebooksPath, JSON.stringify(notes, null, '\t'))
     }
-    switchNotebookPlaces = (first,second) => {
-        //switch notebook places here
-        //deal with notes  here
+    switchNotebookPlaces = (a,b) => {
+	Notebooks = this.getNotebooks()
+	//in the notes: a->c b->a c->b
+	//not the best way
+	//rewrite saveNote so that it's notebook->note and not note->notebook
         return
     }
 }
-*/
 
 module.exports = NotesHandler;
